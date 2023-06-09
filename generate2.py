@@ -4,6 +4,7 @@ import sys
 import xmltodict
 import uuid
 import os
+from pathlib import Path
 
 def get_start():
     return """#pragma once
@@ -338,38 +339,45 @@ def generate_states(class_name, state):
 
     return str
 
-#converting xml to dictionary
-doc = dict();
+def main():
+    #converting xml to dictionary
+    doc = dict();
 
-input_name = sys.argv[1]
-#input_name = "BLQM.qm"
+    input_qm_file = Path(sys.argv[1])
+    #input_qm_file = Path("BLQM.qm")
 
-with open(input_name) as fd:
-    doc = xmltodict.parse(fd.read())
-#print(doc)
+    with open(input_qm_file) as fd:
+        doc = xmltodict.parse(fd.read())
+    #print(doc)
 
-statechart = doc['model']['package']['class']['statechart'];
+    statechart = doc['model']['package']['class']['statechart'];
 
-clear_dict(statechart)
-list_states(statechart)
+    clear_dict(statechart)
+    list_states(statechart)
 
-#f = open("MM.h", 'r');
-#old = f.read()
-#f.close()
-class_name = input_name[:input_name.find('.')]
-f = open(class_name + ".hpp", 'w+');
-ss = generate_states("MM", statechart)
+    #f = open("MM.h", 'r');
+    #old = f.read()
+    #f.close()
+    class_name = input_qm_file.stem
+    f = open(class_name + ".hpp", 'w+');
+    ss = generate_states("MM", statechart)
 
-#index = old.find("// Start Generated2")
-#new = old[:(index + len('// Start Generated2') +1)]
-#new += add_tab(ss)
-#new += old[(index + len('// Start Generated2') +1):]
-new = get_start() + "\n" + add_tab(ss) + "\n};"
+    #index = old.find("// Start Generated2")
+    #new = old[:(index + len('// Start Generated2') +1)]
+    #new += add_tab(ss)
+    #new += old[(index + len('// Start Generated2') +1):]
+    new = get_start() + "\n" + add_tab(ss) + "\n};"
 
-new = new.replace("MM", class_name)
+    new = new.replace("MM", class_name)
 
-f.write(new)
-f.close()
+    f.write(new)
+    f.close()
 
-print("End");
+    print("End");
+
+if __name__ == "__main__":
+    main()
+
+
+
 
