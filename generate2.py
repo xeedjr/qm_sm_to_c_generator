@@ -182,7 +182,7 @@ def serahc_state(search_state, target_state):
             if 'initial' in search_state:
                 search_state = s[int(dir)-1]
             else:
-                search_state = s[int(dir)]
+                search_state = s[int(dir)-1]
     return search_state;
 
 def list_states(dic): 
