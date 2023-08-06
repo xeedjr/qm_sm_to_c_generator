@@ -181,8 +181,10 @@ def serahc_state(search_state, target_state):
                 s = [s]
             if 'initial' in search_state:
                 search_state = s[int(dir)-1]
-            else:
+            elif 'tran' in search_state:
                 search_state = s[int(dir)-1]
+            else:
+                search_state = s[int(dir)]
     return search_state;
 
 def list_states(dic): 
@@ -344,7 +346,7 @@ def main():
     doc = dict();
 
     input_qm_file = Path(sys.argv[1])
-    #input_qm_file = Path("BLQM.qm")
+    #input_qm_file = Path("QuadcopterStateQM.qm")
 
     with open(input_qm_file) as fd:
         doc = xmltodict.parse(fd.read())
